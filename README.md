@@ -1,3 +1,4 @@
+![LocalShare](Recursos/localshare.png)
 
 *Compartilhe um servidor pessoal entre um grupo particular!*
 
