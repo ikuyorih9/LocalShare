@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <thread>
+#include <chrono>
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -34,7 +36,7 @@ int main(int argc, char *argv[]) {
     coap_address_init(&dst_addr);
     dst_addr.addr.sin.sin_family = AF_INET;
     dst_addr.addr.sin.sin_port = htons(5683);
-    inet_pton(AF_INET, "127.0.0.1", &dst_addr.addr.sin.sin_addr);
+    inet_pton(AF_INET, "192.168.195.51", &dst_addr.addr.sin.sin_addr);  // Atualize o IP
 
     coap_session_t *session = coap_new_client_session(ctx, nullptr, &dst_addr, COAP_PROTO_UDP);
     if (!session) {
@@ -60,6 +62,9 @@ int main(int argc, char *argv[]) {
     coap_add_option(pdu, COAP_OPTION_URI_PATH, 4, (const uint8_t *)"file");
     coap_add_data(pdu, strlen(file_name), (const uint8_t *)file_name);
     coap_send(session, pdu);
+
+    // Pausa para garantir que o nome do arquivo seja processado
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // Enviar dados do arquivo
     printf("Sending file data of size: %ld\n", file_size);
