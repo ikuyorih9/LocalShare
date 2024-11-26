@@ -11,7 +11,49 @@
         };
 
         socket.onmessage = (event) => {
-            console.log('Mensagem do servidor: ', event.data);
+            const data = event.data;
+            console.log('Recebido: ', data);
+
+            if (typeof data === 'string') {
+                if (!receivingFile) {
+                    console.log('Recebendo metadados: ', data);
+                    const [usernameLength, username, passwordLength, password, filenameLength, filename, fileSize] = data.split(',');
+
+                    // Exibir metadados
+                    console.log(`Username: ${username}`);
+                    console.log(`Password: ${password}`);
+                    console.log(`File name: ${filename}`);
+                    console.log(`File size: ${fileSize} bytes`);
+
+                    fileName = filename;
+                    receivingFile = true;
+                    fileData = [];
+                }
+            } else {
+                // Receber partes do arquivo
+                fileData.push(data);
+                console.log('Recebendo parte do arquivo...');
+
+                // Verificar se a transmissão do arquivo foi concluída
+                if (data.byteLength === 1 && new Uint8Array(data)[0] === 0) {
+                    console.log('Recepção do arquivo concluída. Salvando...');
+
+                    // Concatenar as partes do arquivo
+                    const fileBlob = new Blob(fileData);
+                    const url = URL.createObjectURL(fileBlob);
+
+                    // Criar um link para download
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+
+                    receivingFile = false;
+                    fileData = [];
+                }
+            }
         };
 
         socket.onclose = (event) => {
@@ -21,6 +63,11 @@
         socket.onerror = (error) => {
             console.log('Erro: ', error);
         };
+
+        // Variáveis para recepção de arquivo
+        let fileData = [];
+        let fileName = "";
+        let receivingFile = false;
     </script>
 </body>
 </html>

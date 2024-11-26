@@ -1,10 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const WebSocket = require('ws');
 const path = require('path');
+const fs = require('fs');
 
 let mainWindow;
 let wsServer;
-let connectedClients = 0;
+let connectedClients = [];
+let userCredentials = {};
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -18,26 +20,28 @@ const createWindow = () => {
   });
 
   mainWindow.loadFile('./html/index.html');
-}
+};
 
 app.on('ready', createWindow);
 
-ipcMain.on('start-server', (event, ip, port, user, passwor) => {
+ipcMain.on('start-server', (event, ip, port, username, password) => {
   console.log(`Iniciando servidor em ${ip}:${port}`);
+  console.log(`Username: ${username}, Password: ${password}`);
+
+  // Armazenar credenciais de usuário
+  userCredentials = { username, password };
+
   wsServer = new WebSocket.Server({ port: port, host: ip });
 
   wsServer.on('connection', (socket) => {
     console.log('Cliente conectado');
-    connectedClients++;
-    mainWindow.webContents.send('client-connected', connectedClients);
-    socket.on('message', (message) => {
-      console.log('Mensagem recebida: ' + message);
-      socket.send('Mensagem recebida: ' + message);
-    });
+    connectedClients.push(socket);
+    mainWindow.webContents.send('client-connected', connectedClients.length);
+
     socket.on('close', () => {
       console.log('Cliente desconectado');
-      connectedClients--;
-      mainWindow.webContents.send('client-disconnected', connectedClients);
+      connectedClients = connectedClients.filter(client => client !== socket);
+      mainWindow.webContents.send('client-disconnected', connectedClients.length);
     });
   });
 
@@ -52,6 +56,41 @@ ipcMain.on('start-server', (event, ip, port, user, passwor) => {
 });
 
 ipcMain.on('send-file', (event, filepath) => {
-  // Lógica para enviar arquivo para o cliente conectado
-  console.log(`Enviando arquivo: ${filepath}`);
+  console.log(`Recebido caminho do arquivo para envio: ${filepath}`); // Log para verificar o valor do caminho do arquivo
+  if (!filepath || !fs.existsSync(filepath)) {
+    console.error('Arquivo não encontrado ou caminho inválido');
+    return;
+  }
+
+  if (connectedClients.length === 0) {
+    console.log('Nenhum cliente conectado.');
+    return;
+  }
+
+  const client = connectedClients[0]; // Enviar para o primeiro cliente conectado
+
+  try {
+    const { username, password } = userCredentials;
+
+    // Enviar metadados do arquivo
+    const filename = path.basename(filepath);
+    const fileSize = fs.statSync(filepath).size;
+    const metadata = `${username.length},${username},${password.length},${password},${filename.length},${filename},${fileSize}`;
+
+    console.log(`Enviando metadados: ${metadata}`);
+    client.send(metadata);
+
+    // Enviar o arquivo
+    const stream = fs.createReadStream(filepath);
+    stream.on('data', (chunk) => {
+      console.log('Enviando chunk de dados...');
+      client.send(chunk);
+    });
+    stream.on('end', () => {
+      console.log('Envio do arquivo concluído.');
+      client.send(Buffer.from([0])); // Indicar o final da transferência
+    });
+  } catch (error) {
+    console.error('Erro ao enviar arquivo:', error);
+  }
 });

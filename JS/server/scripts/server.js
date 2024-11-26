@@ -12,6 +12,7 @@ document.getElementById('sendButton').addEventListener('click', () => {
   const fileInput = document.getElementById('fileInput');
   if (fileInput.files.length > 0) {
     const filePath = fileInput.files[0].path;
+    console.log(`Selecionado para envio: ${filePath}`); // Adicionar log para ver o valor do caminho do arquivo
     ipcRenderer.send('send-file', filePath);
   } else {
     alert('Por favor, selecione um arquivo primeiro.');
