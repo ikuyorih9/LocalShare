@@ -1,6 +1,7 @@
 // ESP32: main.cpp
 
 #include <Arduino.h>
+#include <Wire.h>
 #include "frtos.hpp"
 #include "i2c.hpp"
 
@@ -13,20 +14,20 @@ void setup() {
   xTaskCreate(
     Tarefa1,         // Função da tarefa
     "Tarefa1",       // Nome da tarefa
-    1024,            // Tamanho da pilha (em palavras)
+    4096,            // Tamanho da pilha (em palavras)
     NULL,            // Parâmetro passado para a tarefa
     1,               // Prioridade
     NULL             // Handle (opcional)
   );
 
-  xTaskCreate(
-    Tarefa2,         // Função da tarefa
-    "Tarefa2",       // Nome da tarefa
-    1024,            // Tamanho da pilha
-    NULL,            // Parâmetro
-    1,               // Prioridade
-    NULL             // Handle (opcional)
-  );
+  // xTaskCreate(
+  //   Tarefa2,         // Função da tarefa
+  //   "Tarefa2",       // Nome da tarefa
+  //   1024,            // Tamanho da pilha
+  //   NULL,            // Parâmetro
+  //   1,               // Prioridade
+  //   NULL             // Handle (opcional)
+  // );
 }
 
 void loop() {
