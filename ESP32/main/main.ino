@@ -1,35 +1,45 @@
-// ESP32: main.cpp
-
 #include <Arduino.h>
 #include <Wire.h>
 #include "frtos.hpp"
 #include "i2c.hpp"
 
+QueueHandle_t dataQueue;
+
 void setup() {
-  Wire.begin(I2C_ADDRESS); // Configura ESP32 como Slave
-  Wire.onRequest(onRequest); // Callback quando o Master solicita dados
-  Wire.onReceive(onReceive); // Callback quando o Master envia dados
   Serial.begin(115200);
-  
+
+  // Configura I2C
+  Wire.begin(I2C_ADDRESS);
+  Wire.onRequest(onRequest);
+  Wire.onReceive(onReceive);
+
+  // Cria a fila
+  dataQueue = xQueueCreate(10, sizeof(char) * 128);
+  if (dataQueue == NULL) {
+    Serial.println("Falha ao criar a fila!");
+  }
+
+  // Cria a tarefa WebSocket
   xTaskCreate(
     Tarefa1,         // Função da tarefa
     "Tarefa1",       // Nome da tarefa
-    4096,            // Tamanho da pilha (em palavras)
+    8192,            // Tamanho da pilha
     NULL,            // Parâmetro passado para a tarefa
     1,               // Prioridade
-    NULL             // Handle (opcional)
+    NULL             // Handle
   );
 
-  // xTaskCreate(
-  //   Tarefa2,         // Função da tarefa
-  //   "Tarefa2",       // Nome da tarefa
-  //   1024,            // Tamanho da pilha
-  //   NULL,            // Parâmetro
-  //   1,               // Prioridade
-  //   NULL             // Handle (opcional)
-  // );
+  // Cria a tarefa I2C
+  xTaskCreate(
+    Tarefa2,         // Função da tarefa
+    "Tarefa2",       // Nome da tarefa
+    4096,            // Tamanho da pilha
+    NULL,            // Parâmetro passado para a tarefa
+    1,               // Prioridade
+    NULL             // Handle
+  );
 }
 
 void loop() {
-  delay(100);
+  // Nada a ser feito aqui
 }

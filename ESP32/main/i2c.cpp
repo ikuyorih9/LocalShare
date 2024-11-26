@@ -1,15 +1,15 @@
 #include "i2c.hpp"
-
-#include <Arduino.h>
 #include <Wire.h>
+#include <Arduino.h>
 
 void onRequest() {
   const char* message = "Hello Pi!";
-  Wire.write((uint8_t*)message, strlen(message)); // Converte para uint8_t* e envia o tamanho da mensagem
+  Wire.write((uint8_t*)message, strlen(message));
 }
+
 void onReceive(int numBytes) {
   while (Wire.available()) {
-    char c = Wire.read(); // Lê dados do Master
+    char c = Wire.read();
     Serial.print(c);
   }
   Serial.println();
