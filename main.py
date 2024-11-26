@@ -35,8 +35,8 @@ try:
         client.sendall(tamanho.to_bytes(4, byteorder='little'))
         print("Enviando arquivo:")
         envia_arquivo(client, filename)
-        while True:
-            pass
+        # while True:
+        #     pass
     except Exception as e:
         print(f"Erro ao enviar: {e}")
     finally:
