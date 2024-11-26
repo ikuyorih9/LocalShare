@@ -34,7 +34,7 @@ try:
         print(f"Enviando tamanho do nome arquivo ({tamanho})({tamanho.to_bytes(4, byteorder='little')})...")
         client.sendall(tamanho.to_bytes(4, byteorder='little'))
         print("Enviando arquivo:")
-        #envia_arquivo(client, filename)
+        envia_arquivo(client, filename)
         while True:
             pass
     except Exception as e:
