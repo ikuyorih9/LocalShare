@@ -10,7 +10,7 @@ void setup() {
   Wire.onRequest(onRequest); // Callback quando o Master solicita dados
   Wire.onReceive(onReceive); // Callback quando o Master envia dados
   Serial.begin(115200);
-
+  
   xTaskCreate(
     Tarefa1,         // Função da tarefa
     "Tarefa1",       // Nome da tarefa
@@ -32,5 +32,4 @@ void setup() {
 
 void loop() {
   delay(100);
-
 }

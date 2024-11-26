@@ -18,14 +18,37 @@ void Tarefa1(void *pvParameters) {
       while (client.connected()) {
         if (client.available()) {
           uint8_t username_len;
-          client.readBytes(username_len, 1)
+          client.readBytes(&username_len, 1);
+          
+          char username[username_len + 1];
+          client.readBytes(username, username_len);
+          username[username_len] = '\0';
+          Serial.print("USERNAME: ");
+          Serial.println(username);
 
           uint8_t filename_len;
-          client.readBytes(filename_len, 1)
+          client.readBytes(&filename_len, 1);
           
-          String response = client.readStringUntil('\n');
-          Serial.println("Resposta do servidor: " + response);
-          Serial.println("Tarefa 1 executando...");
+          char filename[filename_len + 1];
+          client.readBytes(filename, filename_len);
+          username[filename_len] = '\0';
+          Serial.print("FILENAME: ");
+          Serial.println(filename);
+
+          uint8_t filesize_b[4];
+          client.readBytes(filesize_b, 4);
+
+          uint filesize = byte4_to_int(filesize_b);
+          Serial.print("Tamanho do arquivo: ");
+          Serial.println(filesize);
+
+          for(int i = 0; i < filesize; i++){
+            char byte;
+            client.readBytes(&byte, 1);
+            Serial.print(byte);
+          }
+
+
         }
       }
 
@@ -46,4 +69,12 @@ void Tarefa2(void *pvParameters) {
     Serial.println("Tarefa 2 executando...");
     vTaskDelay(2000 / portTICK_PERIOD_MS); // Atraso de 2 segundos
   }
+}
+
+uint byte4_to_int(uint8_t * byte){
+  uint int_from_byte = 0;
+  for(int i = 3; i >= 0; i--){
+    int_from_byte += byte[i] << i*8;
+  }
+  return int_from_byte;
 }
