@@ -20,7 +20,7 @@ def envia_arquivo(client, filepath):
                     print(f"Byte: {byte}")
                     client.sendall(byte)
                 byte = file.read(1)
-                time.sleep(0.1)
+                time.sleep(0.05)
             client.sendall(bytes([0]))
                 
     except FileNotFoundError:
