@@ -1,5 +1,6 @@
 #include "i2c.hpp"
 
+#include <Arduino.h>
 #include <Wire.h>
 
 void onRequest() {
