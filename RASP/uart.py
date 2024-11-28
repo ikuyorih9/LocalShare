@@ -1,6 +1,7 @@
 import serial
 
 from Header import Header
+from File import File
 
 def setup():
   # Configura a porta serial
@@ -35,4 +36,4 @@ def get_file(ser):
   file_name = ser.read(file_name_size)
   file_name = file_name.decode('utf-8')
   
-  return file_name
+  return File(file_name_size, file_name)
