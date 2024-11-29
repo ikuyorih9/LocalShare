@@ -6,7 +6,11 @@
 #define IP "192.168.137.1"
 #define PORTA 1234
 
+
+
 uint byte4_to_int(uint8_t * byte);
+void sendStringToQueue(char * message, uint8_t tam);
 void Tarefa1(void *pvParameters);
 void Tarefa2(void *pvParameters);
+void exampleTask(void *pvParameters);
 #endif
