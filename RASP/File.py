@@ -4,6 +4,8 @@ from dataclasses import dataclass
 class File :
   file_name_size : int
   file_name : str
+  file_size : int
+  bytes_written : int
 
 def print_file(file : File):
   print(f"file_name_size: {file.file_name_size}")

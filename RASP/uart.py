@@ -37,3 +37,24 @@ def get_file(ser):
   file_name = file_name.decode('utf-8')
   
   return File(file_name_size, file_name)
+
+def write_file(ser, f : File):
+  file_size = ser.read(4)
+  f.file_size = int.from_bytes(file_size, byteorder='big')
+
+  with open(f.file_name, 'wb') as file:
+    while f.bytes_written < f.file_size:
+      file_data = ser.read(1)
+      file.write(file_data)
+      f.bytes_written += 1
+
+def send_file(ser, f : File):
+  ser.write(f.file_name_size.to_bytes(1, byteorder='big'))
+  ser.write(f.file_name.encode('utf-8'))
+
+  ser.write(f.file_size.to_bytes(4, byteorder='big'))
+
+  with open(f.file_name, 'rb') as file:
+    for _ in range(f.file_size):
+        file_data = file.read(1)
+        ser.write(file_data)
