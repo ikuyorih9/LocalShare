@@ -22,7 +22,7 @@ try:
     print(f"Nova conexão de {addr}")
 
     try:
-        client.sendall(bytes([0]))
+        client.sendall(bytes([1]))
 
         print("Enviando tamanho do username...")
         client.sendall(bytes([username_len]))

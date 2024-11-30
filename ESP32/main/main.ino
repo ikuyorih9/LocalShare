@@ -12,7 +12,11 @@ void setup() {
   esp_task_wdt_deinit();
   Serial.begin(115200);
 
-  DataToSend = xQueueCreate(32, sizeof(uint8_t*)*256);  // Criação da fila com capacidade de 10 elementos
+  Wire.begin(0x08);
+  Wire.onReceive(onReceive);
+  Wire.onRequest(onRequest);
+
+  DataToSend = xQueueCreate(32, sizeof(uint8_t));  // Criação da fila com capacidade de 10 elementos
   if (DataToSend == NULL) {
       Serial.println("Erro ao criar a fila");
       while (1);
@@ -29,15 +33,15 @@ void setup() {
   );
 
   // Tarefa2 executando no Núcleo 1
-  xTaskCreatePinnedToCore(
-    Tarefa2,           // Função da tarefa
-    "Tarefa2",         // Nome da tarefa
-    4096,              // Tamanho da pilha
-    NULL,              // Parâmetro
-    1,                 // Prioridade
-    NULL,              // Handle (opcional)
-    1                  // Núcleo onde a tarefa será executada (1 para o núcleo 1)
-  );
+  // xTaskCreatePinnedToCore(
+  //   Tarefa2,           // Função da tarefa
+  //   "Tarefa2",         // Nome da tarefa
+  //   4096,              // Tamanho da pilha
+  //   NULL,              // Parâmetro
+  //   1,                 // Prioridade
+  //   NULL,              // Handle (opcional)
+  //   1                  // Núcleo onde a tarefa será executada (1 para o núcleo 1)
+  // );
 
 }
 
