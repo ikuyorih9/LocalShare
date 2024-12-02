@@ -15,9 +15,8 @@ void Tarefa1(void *pvParameters) {
       client.readBytes(&command, 1);
       Serial.print("TASK1: comando = ");
       Serial.println(command);
-      xQueueSend(DataToSend, &command, portMAX_DELAY);
 
-      vTaskDelay(100 / portTICK_PERIOD_MS);
+      xQueueSend(DataToSend, &command, portMAX_DELAY); //Envia o COMANDO para a fila.
 
       // RECEBE O TAMANHO DO NOME DE USUÁRIO.
       uint8_t username_len;
@@ -26,17 +25,22 @@ void Tarefa1(void *pvParameters) {
       Serial.println(username_len);
 
       xQueueSend(DataToSend, &username_len, portMAX_DELAY); // Envia para a fila.
-      
-      vTaskDelay(1 / portTICK_PERIOD_MS);
 
       // RECEBE O NOME DE USUÁRIO.
       char username[username_len + 1];
-      client.readBytes(username, username_len);
+      for(int i = 0; i < username_len; i++){
+        uint8_t username_byte;
+        client.readBytes(&username_byte, 1);
+        xQueueSend(DataToSend, &username_byte, portMAX_DELAY);
+        username[i] = username_byte;
+      }
+      
+      //client.readBytes(username, username_len);
       username[username_len] = '\0';
       Serial.print("TASK1: username = ");
       Serial.println(username);
 
-      sendStringToQueue(username, username_len);
+      //sendStringToQueue(username, username_len);
 
       // RECEBE O TAMANHO DA SENHA.
       uint8_t password_len;
@@ -44,8 +48,6 @@ void Tarefa1(void *pvParameters) {
       Serial.print("TASK1: password_len = ");
       Serial.println(password_len);
       xQueueSend(DataToSend, &password_len, portMAX_DELAY);
-
-      vTaskDelay(1 / portTICK_PERIOD_MS);
 
       // RECEBE SENHA.
       char password[password_len + 1];
@@ -102,24 +104,20 @@ void Tarefa1(void *pvParameters) {
         sendStringToQueue(filename, filename_len);
       }
     }
-    vTaskDelay(100 / portTICK_PERIOD_MS); // Aguardar antes de tentar novamente
+    vTaskDelay(500 / portTICK_PERIOD_MS); // Aguardar antes de tentar novamente
   }
 }
 
 // Função da Tarefa 2
 void Tarefa2(void *pvParameters) {
   while(true){
-    if (uxQueueMessagesWaiting(DataToReceive) == 0) {
-        //Serial.println("2: A fila está vazia.");
-        uint8_t hugo;
-    }
-    else{
+    if (uxQueueMessagesWaiting(DataToReceive) != 0) {
       uint8_t byte;
       if (xQueueReceive(DataToReceive, &byte, portMAX_DELAY)) {
           Serial.print("\t\tByte: ");
           Serial.println(byte, DEC);
           client.write(byte);
-          vTaskDelay(1 / portTICK_PERIOD_MS); // Aguardar antes de tentar novamente
+          vTaskDelay(RW_DELAY / portTICK_PERIOD_MS);
       }
     }
   }
@@ -148,6 +146,5 @@ void sendBytesToQueue(uint8_t * bytes, int tam){
   for(int i = 0; i < tam; i++){
     int byte = bytes[i];
     xQueueSend(DataToSend, &byte, portMAX_DELAY);
-    vTaskDelay(1 / portTICK_PERIOD_MS);
   }
 }

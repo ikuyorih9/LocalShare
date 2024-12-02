@@ -5,7 +5,7 @@ ip = "192.168.137.1"
 porta = 1234
 DELAY_BUFFER = 0.001
 
-command = 1
+command = 2
 username = input("Usuário: ")
 username_len = len(username)
 password = input("Senha: ")
@@ -66,7 +66,7 @@ try:
                     response = client.recv(1)  # Lê até 1024 bytes
                     file.write(response)  # Escreve os bytes no arquivo
                     print(f"{i} cliente: {response}")
-                    time.sleep(0.001)
+                    time.sleep(0.005)
 
         while True:
             pass
