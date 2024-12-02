@@ -1,0 +1,33 @@
+from i2c_functions import *
+from time import sleep
+
+def read_header():
+	while True:
+		command = readBytes(1)
+		print(f"Comando: {command}({convertByteToChar(command)})")
+
+		if command == 0 or command == 1 or command == 2:
+			username_len = readBytes(1)
+			username = convertBytesToString(readBytes(username_len))
+			print(f"\tUsername ({username_len} bytes): {username})")
+
+			password_len = readBytes(1)
+			password = convertBytesToString(readBytes(password_len))
+			print(f"\tPassword ({password_len} bytes): {password}")
+			
+			return command, username, password
+		sleep(1)
+
+def store_file(username):
+	filename_len = readBytes(1)
+	filename = convertBytesToString(readBytes(filename_len))
+	print(f"\tFilename ({filename_len} bytes): {filename}")
+
+	try:
+		with open()
+	except Exception as e:
+		print(f"Erro ao criar/escrever o arquivo: {e}")
+
+	file_len = readBytes(1)
+	file = readBytes(file_len)
+	print(f"\tFile ({file_len} bytes): {filename}")
