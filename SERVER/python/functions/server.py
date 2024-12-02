@@ -18,10 +18,9 @@ def envia_arquivo(client, filepath):
             while byte:
                 if byte != b'\r':
                     print(f"Byte: {byte}")
-                    client.sendall(byte)
+                client.sendall(byte)
                 byte = file.read(1)
-                time.sleep(0.05)
-            client.sendall(bytes([0]))
+                time.sleep(0.001)
                 
     except FileNotFoundError:
         print(f"Arquivo {filepath} não foi encontrado!")
