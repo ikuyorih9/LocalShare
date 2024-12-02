@@ -1,6 +1,10 @@
 import os
 import hashlib
 
+def obtem_diretorio_user(username):
+	caminho_storage = os.path.join(os.path.expanduser("~"), "storage")
+	return os.path.join(caminho_storage, username)
+
 def obtem_diretorio_arquivo(username, filename):
     caminho_storage = os.path.join(os.path.expanduser("~"), "storage")
     caminho_usuario = os.path.join(caminho_storage, username)

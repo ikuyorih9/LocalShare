@@ -22,7 +22,6 @@ def read_header():
 			print(f"\tPassword ({password_len} bytes): {password}")
 			
 			return command, username, password
-		sleep(1)
 
 def store_file(username):
 	filename_len = readBytes(1)
@@ -50,12 +49,12 @@ def load_file(username):
 	filepath = obtem_diretorio_arquivo(username, filename)
 	print(f"Filepath: {filepath}")
 
-
 	file_len = os.path.getsize(filepath)
 	print(f"File_len: {file_len}")
+
 	file_len_bytes = list(file_len.to_bytes(4, byteorder='big'))
 	bus.write_i2c_block_data(I2C_ADDRESS, 0x02, file_len_bytes)
-	sleep(DELAY_BUFFER)
+	sleep(4*RW_DELAY)
 
 	try:
 		with open(filepath, 'rb') as file:
@@ -64,9 +63,24 @@ def load_file(username):
 			while byte:
 				bus.write_byte_data(I2C_ADDRESS, 0x01, byte[0])
 				print(f"{i} - {byte[0]}{byte}")
-				sleep(0.1)
+				sleep(RW_DELAY)
 				byte = file.read(1)
 				i += 1
-		sleep(3)
+
+		success_byte = readBytes(1)
+		while success_byte == 0:
+			print(f"Esperando por resposta do servidor... ({success_byte})")
+			success_byte = readBytes(1)
 	except Exception as e:
 		print(f"{e}")
+
+
+def list_files(username):
+	path = obtem_diretorio_user(username)
+	
+	files = []
+	for filename in os.listdir(path):
+		if filename != ".senha.bin":
+			print(f"FILE: {filename}")
+			for i in range(len(filename)):
+				bus.write_byte_data(I2C_ADDRESS, 0x01, ord(filename[i]))
