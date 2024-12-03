@@ -2,12 +2,12 @@
 
 <p align="center">
 <img src="https://img.shields.io/github/license/ikuyorih9/LocalShare"/>
-<img src="https://img.shields.io/badge/Language-Python-ffd343"/>
-<img src="https://img.shields.io/badge/Language-C/C++-3186a0"/>
-<img src="https://img.shields.io/badge/OS-PiOS-E30B5C"/>
-<img src="https://img.shields.io/badge/_-HTML5-grey?logo=html5"/>
-<img src="https://img.shields.io/badge/_-CSS3-grey?logo=css3"/>
-<img src="https://img.shields.io/badge/_-javascript-grey?logo=javascript"/>
+<img src="https://img.shields.io/badge/_-Pyhton-ffd343?logo=Python&logoColor=323330"/>
+<img src="https://img.shields.io/badge/_-C/C++-3186a0?logo=cplusplus&logoColor=323330"/>
+<img src="https://img.shields.io/badge/_-PiOS-E30B5C?logo=raspberrypi&logoColor=323330"/>
+<img src="https://img.shields.io/badge/_-HTML5-ec6231?logo=html5&logoColor=323330"/>
+<img src="https://img.shields.io/badge/_-CSS3-2965f1?logo=css3&logoColor=323330"/>
+<img src="https://img.shields.io/badge/_-JavaScript-f0db40?logo=javascript&logoColor=323330"/>
 </p>
 
 # LocalShare
