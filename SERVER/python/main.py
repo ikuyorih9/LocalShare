@@ -5,7 +5,7 @@ ip = "192.168.137.1"
 porta = 1234
 DELAY_BUFFER = 0.001
 
-command = 2
+command = 3
 username = input("Usuário: ")
 username_len = len(username)
 password = input("Senha: ")
@@ -58,18 +58,35 @@ try:
             for i in range (4):
                 tam_bytes.append(client.recv(1)[0])
             tam = int.from_bytes(tam_bytes, byteorder='big')
+            if tam == 0:
+                print("Arquivo não existe no servidor!")
+                exit(-1)
             
             print(f"TAMANHO: {tam}")
 
-            with open("foto.png", "wb") as file:  # Abre ou cria o arquivo para escrita em modo binário
+            with open("foto.png", "wb") as file: 
                 for i in range(tam):
-                    response = client.recv(1)  # Lê até 1024 bytes
-                    file.write(response)  # Escreve os bytes no arquivo
+                    response = client.recv(1)
+                    file.write(response)
                     print(f"{i} cliente: {response}")
                     time.sleep(0.005)
+        elif command == 2:
+            filename_len = client.recv(1)
+            while filename_len != 255:
+                filename = ""
+                for i in range(int.from_bytes(filename_len, byteorder='big')):
+                    filename_byte = client.recv(1)
+                    filename += filename_byte.decode('ascii')
+                print(f"\t-{filename}")
+                filename_len = client.recv(1)
+            time.sleep(0.005)
+        elif command == 3:
+            success = client.recv(1)
+            if success == 1:
+                print("Usuario cadastrado com sucesso!")
+            else:
+                print("Usuário já existe no sistema")
 
-        while True:
-            pass
     except Exception as e:
         print(f"Erro ao enviar: {e}")
     finally:
