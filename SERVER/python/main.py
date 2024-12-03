@@ -5,7 +5,7 @@ ip = "192.168.137.1"
 porta = 1234
 DELAY_BUFFER = 0.001
 
-command = 3
+command = 0
 username = input("Usuário: ")
 username_len = len(username)
 password = input("Senha: ")
