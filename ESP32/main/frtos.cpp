@@ -10,101 +10,11 @@ extern WiFiClient client;
 void Tarefa1(void *pvParameters) {
   while(true){
     if (client.available()) {
-      // RECEBE O COMANDO
-      uint8_t command;
-      client.readBytes(&command, 1);
-      Serial.print("TASK1: comando = ");
-      Serial.println(command);
-
-      xQueueSend(DataToSend, &command, portMAX_DELAY); //Envia o COMANDO para a fila.
-
-      // RECEBE O TAMANHO DO NOME DE USUÁRIO.
-      uint8_t username_len;
-      client.readBytes(&username_len, 1); // Recebe do servidor.
-      Serial.print("TASK1: username_len = ");
-      Serial.println(username_len);
-
-      xQueueSend(DataToSend, &username_len, portMAX_DELAY); // Envia para a fila.
-
-      // RECEBE O NOME DE USUÁRIO.
-      char username[username_len + 1];
-      for(int i = 0; i < username_len; i++){
-        uint8_t username_byte;
-        client.readBytes(&username_byte, 1);
-        xQueueSend(DataToSend, &username_byte, portMAX_DELAY);
-        username[i] = username_byte;
-      }
-      
-      //client.readBytes(username, username_len);
-      username[username_len] = '\0';
-      Serial.print("TASK1: username = ");
-      Serial.println(username);
-
-      //sendStringToQueue(username, username_len);
-
-      // RECEBE O TAMANHO DA SENHA.
-      uint8_t password_len;
-      client.readBytes(&password_len, 1); // Recebe do servidor.
-      Serial.print("TASK1: password_len = ");
-      Serial.println(password_len);
-      xQueueSend(DataToSend, &password_len, portMAX_DELAY);
-
-      // RECEBE SENHA.
-      char password[password_len + 1];
-      client.readBytes(password, password_len);
-      password[password_len] = '\0';
-      Serial.print("TASK1: password = ");
-      Serial.println(password);
-
-      sendStringToQueue(password, password_len);
-
-      if(command == 0){
-        // RECEBE O TAMANHO DO ARQUIVO.
-        uint8_t filename_len;
-        client.readBytes(&filename_len, 1);
-        xQueueSend(DataToSend, &filename_len, portMAX_DELAY);
-        Serial.print("TASK1: filename_len = ");
-        Serial.println(filename_len);
-
-        char filename[filename_len + 1];
-        client.readBytes(filename, filename_len);
-        filename[filename_len] = '\0';
-        Serial.print("TASK1: filename = ");
-        Serial.println(filename);
-
-        sendStringToQueue(filename, filename_len);
-
-        uint8_t file_len[4];
-        client.readBytes(file_len, 4);
-        sendBytesToQueue(file_len, 4); 
-
-        int ifile_len = byte4_to_int(file_len);
-        Serial.print("TASK1: file_len = ");
-        Serial.println(ifile_len);
-
-        int bytes_lidos = 0;
-        while(bytes_lidos < ifile_len){
-          uint8_t data_byte;
-          bytes_lidos += client.readBytes(&data_byte, 1);
-          xQueueSend(DataToSend, &data_byte, portMAX_DELAY);
-        }
-      }
-      else if(command == 1){
-        uint8_t filename_len;
-        client.readBytes(&filename_len, 1);
-        xQueueSend(DataToSend, &filename_len, portMAX_DELAY);
-        Serial.print("TASK1: filename_len = ");
-        Serial.println(filename_len);
-
-        char filename[filename_len + 1];
-        client.readBytes(filename, filename_len);
-        filename[filename_len] = '\0';
-        Serial.print("TASK1: filename = ");
-        Serial.println(filename);
-        sendStringToQueue(filename, filename_len);
-      }
+      uint8_t byte;
+      client.readBytes(&byte, 1);
+      xQueueSend(DataToSend, &byte, portMAX_DELAY); //Envia o COMANDO para a fila.
+      vTaskDelay(RW_DELAY / portTICK_PERIOD_MS);
     }
-    vTaskDelay(500 / portTICK_PERIOD_MS); // Aguardar antes de tentar novamente
   }
 }
 
