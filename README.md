@@ -2,15 +2,13 @@
 
 <p align="center">
 <img src="https://img.shields.io/github/license/ikuyorih9/LocalShare"/>
-<img src="https://img.shields.io/badge/_-Pyhton-ffd343?logo=Python&logoColor=323330"/>
+<img src="https://img.shields.io/badge/_-Python-ffd343?logo=Python&logoColor=323330"/>
 <img src="https://img.shields.io/badge/_-C/C++-3186a0?logo=cplusplus&logoColor=323330"/>
-<img src="https://img.shields.io/badge/_-PiOS-E30B5C?logo=raspberrypi&logoColor=323330"/>
+<img src="https://img.shields.io/badge/_-RaspberryPiOS-E30B5C?logo=raspberrypi&logoColor=323330"/>
 <img src="https://img.shields.io/badge/_-HTML5-ec6231?logo=html5&logoColor=323330"/>
 <img src="https://img.shields.io/badge/_-CSS3-2965f1?logo=css3&logoColor=323330"/>
 <img src="https://img.shields.io/badge/_-JavaScript-f0db40?logo=javascript&logoColor=323330"/>
 </p>
-
-# LocalShare
 
 *Compartilhe um servidor pessoal de arquivos com um grupo particular!*
 
@@ -42,9 +40,9 @@ Estabelece a comunicação TCP/IP com a aplicação e serial com a Raspberry Pi.
 2. **Cadastro de Usuário**: O novo usuário informa as credenciais que deseja utilizar para acessar o sistema (nome de usuário e senha) e o sistema destina um espaço para armazenar os arquivos do novo usuário.
 3. **Envio e Recebimento de Arquivos**: O sistema permite que os arquivos sejam enviados e recebidos por meio de WebSockets. O arquivo é dividido em pacotes de dados binários e transmitido byte a byte.
 
-## Estrutura de dados da comunicação
+## 📂 Estrutura de Dados da Comunicação
 
-A comunicação do usuário para com o servidor, e visse versa, segue a estrutura:
+A comunicação do usuário para com o servidor, e vice-versa, segue a estrutura:
 - Header
 - Dados Enviados/Recebidos
 
