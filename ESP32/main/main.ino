@@ -33,7 +33,7 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) { // Enquanto não conecta
     vTaskDelay(1000 / portTICK_PERIOD_MS); // Task espera 1 segundo.
   }
-  
+
   Serial.println("WiFi conectado!");
   Serial.print("IP da ESP32: ");
   Serial.println(WiFi.localIP());
@@ -87,30 +87,20 @@ void loop() {
 // Função de manipulação do evento WebSocket
 void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
   if (type == WS_EVT_DATA) {
-    // Processa a mensagem recebida
-    String message = String((char*)data).substring(0, len);
-    Serial.printf("Mensagem recebida: %s\n", message.c_str());
-
-    // Deserializa a mensagem JSON
-    DynamicJsonDocument doc(1024);
-    DeserializationError error = deserializeJson(doc, message);
-
-    if (!error) {
-      String messageType = doc["type"];
-
-      if (messageType == "login") {
-        String username = doc["username"];
-        String password = doc["password"];
-
-        // Lógica fictícia de validação de login
-        if (username == "admin" && password == "admin") {
-          client->text("Login bem-sucedido");
-        } else {
-          client->text("Login falhou");
-        }
-      }
-    } else {
-      client->text("Erro no formato da mensagem");
+    // A primeira coisa a fazer é verificar se temos dados suficientes para processar
+    if (len < 3) {
+      client->text("Dados insuficientes.");
+      return;
     }
+    
+    // Verifica se o comando é válido (pode ser um dos 3 valores esperados)
+    if (command < 0 || command > 3) {
+      client->text("Comando inválido.");
+      return;
+    }
+
+    //enviar pra RASP
   }
 }
+
+
