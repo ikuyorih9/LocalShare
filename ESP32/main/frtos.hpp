@@ -1,8 +1,8 @@
 #ifndef FRTOS_HPP
 #define FRTOS_HPP
 
-#define SSID "uguinho"
-#define PASSWORD "bananamelao123"
+#define SSID "LabMicros"
+#define PASSWORD "seluspeesc@"
 #define IP "192.168.137.1"
 #define PORTA 1234
 
