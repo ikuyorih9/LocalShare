@@ -92,9 +92,9 @@ void loop() {
 }
 
 // Função de evento WebSocket
-void webSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
   if (type == WS_TEXT) {
-    String message = String((char*)payload);
+    String message = String((char*)data);
 
     if (!receivingFile) {
       // Primeira parte: comando e informações do arquivo
@@ -119,9 +119,9 @@ void webSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEve
       }
     } else {
       // Recebendo os bytes do arquivo
-      for (size_t i = 0; i < length; i++) {
+      for (size_t i = 0; i < len; i++) {
         if (receivedBytesCount < receivedFileSize) {
-          fileBuffer[receivedBytesCount++] = payload[i];
+          fileBuffer[receivedBytesCount++] = data[i];
           
           // Envia o byte via I2C assim que ele for recebido
           sendByteToI2C(fileBuffer[receivedBytesCount - 1]);
