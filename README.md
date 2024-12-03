@@ -182,13 +182,17 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 
 ## 🚀 Uso
 
-1. Configure a ESP32 e a Raspberry Pi conforme descrito na documentação dos arquivos.
+1. Configure a ESP32 e a Raspberry Pi conforme descrito na documentação dos arquivos. 
 
-2. Inicie o servidor na Raspberry Pi executando main.py.
+3. Inicie o servidor na Raspberry Pi executando main.py.
 
-3. Acesse o site e faça login ou cadastre um novo usuário.
+4. Acesse o site e faça login ou cadastre um novo usuário.
 
-4. Envie e receba arquivos conforme necessário.
+5. Envie e receba arquivos conforme necessário.
+
+### Esquemático de Ligação I2C
+
+<img alt="Esquemático Ligação I2C" src="https://github.com/user-attachments/assets/a6a376ad-6cdf-4e98-b5a8-319fb951b6fe" width="60%">
 
 ## 📄 Licença
 
