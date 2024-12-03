@@ -17,6 +17,13 @@ QueueHandle_t DataToSend;
 QueueHandle_t DataToReceive;
 WiFiClient client;
 
+// Variáveis para armazenar o arquivo recebido
+bool receivingFile = false;
+String receivedFileName = "";
+int receivedFileSize = 0;
+int receivedBytesCount = 0;
+uint8_t* fileBuffer = nullptr;
+
 // Função de setup
 void setup() {
   // Desabilita watchdog para controle manual
@@ -84,23 +91,71 @@ void loop() {
   delay(100);
 }
 
-// Função de manipulação do evento WebSocket
-void onWebSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
-  if (type == WS_EVT_DATA) {
-    // A primeira coisa a fazer é verificar se temos dados suficientes para processar
-    if (len < 3) {
-      client->text("Dados insuficientes.");
-      return;
-    }
-    
-    // Verifica se o comando é válido (pode ser um dos 3 valores esperados)
-    if (command < 0 || command > 3) {
-      client->text("Comando inválido.");
-      return;
-    }
+// Função de evento WebSocket
+void webSocketEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+  if (type == WS_TEXT) {
+    String message = String((char*)payload);
 
-    //enviar pra RASP
+    if (!receivingFile) {
+      // Primeira parte: comando e informações do arquivo
+      if (message[0] == 0x00) {
+        receivingFile = true;
+        int fileNameSize = message[1];  // Tamanho do nome do arquivo
+        receivedFileName = message.substring(2, 2 + fileNameSize);  // Nome do arquivo
+        receivedFileSize = (message[2 + fileNameSize] << 24) |
+                           (message[3 + fileNameSize] << 16) |
+                           (message[4 + fileNameSize] << 8) |
+                           message[5 + fileNameSize];  // Tamanho do arquivo
+
+        // Inicializa o buffer para armazenar os dados do arquivo
+        fileBuffer = (uint8_t*)malloc(receivedFileSize);
+        receivedBytesCount = 0;
+
+        Serial.println("Iniciando recepção do arquivo...");
+        Serial.print("Nome do arquivo: ");
+        Serial.println(receivedFileName);
+        Serial.print("Tamanho do arquivo: ");
+        Serial.println(receivedFileSize);
+      }
+    } else {
+      // Recebendo os bytes do arquivo
+      for (size_t i = 0; i < length; i++) {
+        if (receivedBytesCount < receivedFileSize) {
+          fileBuffer[receivedBytesCount++] = payload[i];
+          
+          // Envia o byte via I2C assim que ele for recebido
+          sendByteToI2C(fileBuffer[receivedBytesCount - 1]);
+        }
+      }
+
+      Serial.print("Recebido: ");
+      Serial.print(receivedBytesCount);
+      Serial.print("/");
+      Serial.println(receivedFileSize);
+
+      // Quando o arquivo estiver completo
+      if (receivedBytesCount >= receivedFileSize) {
+        Serial.println("Arquivo completo enviado.");
+        resetFileReception();  // Reseta as variáveis de recepção de arquivo
+      }
+    }
   }
 }
 
+// Função para enviar um byte via I2C
+void sendByteToI2C(uint8_t byte) {
+  Wire.beginTransmission(I2C_ADDRESS);  // Inicia a transmissão para o endereço I2C da Raspberry Pi
+  Wire.write(byte);  // Envia o byte
+  Wire.endTransmission();  // Finaliza a transmissão
+}
 
+void resetFileReception() {
+  receivingFile = false;
+  receivedFileName = "";
+  receivedFileSize = 0;
+  receivedBytesCount = 0;
+  if (fileBuffer) {
+    free(fileBuffer);
+    fileBuffer = nullptr;
+  }
+}
