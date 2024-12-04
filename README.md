@@ -20,7 +20,7 @@ Desenvolvido por:
 
 ## 📋 Descrição
 
-Um servidor local compartilhado permite que vários usuários cadastrados possam acessar arquivos de uma ou mais unidades de armazenamento comuns. A interação dos usuários com o sistema se dá por meio de um site, onde é requisitado o endereço TCP/IP da ESP32, um usuário e senha. O armazenamento de arquivos é sigiloso e a requisição por parte de um usuário e senha mostra apenas os arquivos relacionados ao seu nome de usuário.
+Um servidor local compartilhado permite que vários usuários cadastrados possam acessar arquivos de uma ou mais unidades de armazenamento comuns. A interação dos usuários com o sistema se dá por meio de uma interface de linha de comando ou por um site (**em breve**), onde é requisitado o endereço TCP/IP da ESP32, um usuário e senha. O armazenamento de arquivos é sigiloso e a requisição por parte de um usuário e senha mostra apenas os arquivos relacionados ao seu nome de usuário.
 
 O site se comunica com a ESP32 utilizando um protocolo TCP/IP. Ela, por sua vez, realiza a conexão serial com a **Raspberry Pi**, que se responsabilizará em armazenar e servir os arquivos de cada usuário. A **ESP32** utiliza processamento paralelo para permitir um maior fluxo de dados e uma comunicação de duas vias simultâneas, para envio e recebimento de dados.
 
@@ -177,16 +177,20 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 ## 📦 Instalação
 
 1. Clone o repositório
+   
+3. Instale o [Arduino IDE](https://www.arduino.cc/en/software)
 
-2. Instale as dependências para a ESP32 e Raspberry Pi conforme listadas acima.
+4. Instale o [Python](https://www.python.org/downloads/)
+
+5. Instale as dependências para a ESP32 e Raspberry Pi conforme listadas nos tópicos anteriores.
 
 ## 🚀 Uso
 
-1. Configure a ESP32 e a Raspberry Pi conforme descrito na documentação dos arquivos. 
+1. Compile/Upload do [main.ino](./ESP32/main/main.ino) para ESP32. 
 
-3. Inicie o servidor na Raspberry Pi executando main.py.
+3. Inicie código de armazenamento da Raspberry Pi executando [main.py](./RASPBERRY/main.py).
 
-4. Acesse o site e faça login ou cadastre um novo usuário.
+4. Inicie o servidor no site ou na aplicação de interface de comando.
 
 5. Envie e receba arquivos conforme necessário.
 
