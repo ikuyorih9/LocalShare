@@ -191,8 +191,10 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 3. Inicie código de armazenamento da Raspberry Pi executando [main.py](./RASPBERRY/main.py).
 
 4. Inicie o servidor no site ou na aplicação de interface de comando.
-
-5. Envie e receba arquivos conforme necessário.
+   - O servidor de interface de comnado é inicado ao executar [server.py](./SERVER/server.py).
+   - Para o site basta acessar o [link](https://local-share-web-page.vercel.app/).
+     
+6. Envie e receba arquivos conforme necessário.
 
 ### Esquemático de Ligação I2C
 
