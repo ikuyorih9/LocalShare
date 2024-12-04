@@ -176,7 +176,7 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 
 ## 📦 Instalação
 
-1. Clone o repositório
+1. Clone o repositório (na Raspberry Pi e no seu PC).
    
 3. Instale o [Arduino IDE](https://www.arduino.cc/en/software)
 
@@ -190,7 +190,7 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 
 3. Inicie código de armazenamento da Raspberry Pi executando [main.py](./RASPBERRY/main.py).
 
-4. Inicie o servidor no site ou na aplicação de interface de comando.
+4. Inicie o servidor no site ou na aplicação de interface de comando (no seu PC).
    - O servidor de interface de comnado é inicado ao executar [server.py](./SERVER/server.py).
    - Para o site basta acessar o [link](https://local-share-web-page.vercel.app/).
      
