@@ -174,6 +174,56 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 - os
 - hashlib
 
+## 📂 Documentação dos Arquivos do Server
+
+### Descrição
+Este servidor TCP aceita conexões de clientes, recebe credenciais de usuário e realiza operações como envio e recebimento de arquivos.
+
+### Configuração
+- `ip`: Endereço IP do servidor.
+- `porta`: Porta do servidor.
+- `DELAY_BUFFER`: Buffer de atraso para envio de dados.
+
+### Comandos
+- `command = 0`: Envia um arquivo para o cliente.
+- `command = 1`: Recebe um arquivo do cliente.
+- `command = 2`: Lista arquivos no servidor.
+- `command = 3`: Cadastra um novo usuário.
+
+### Funções
+#### `cria_servidor(IP, PORTA)`
+Cria um servidor socket TCP.
+
+#### `envia_arquivo(client, filepath)`
+Envia um arquivo para o cliente conectado.
+
+#### `main.py`
+Este script principal configura o servidor, aceita conexões de clientes e executa comandos com base na entrada do usuário.
+
+##### Fluxo de Execução
+1. Solicita `username` e `password` do usuário.
+2. Cria o servidor e aguarda conexões.
+3. Envia credenciais e executa comandos baseados no valor de `command`.
+
+##### Comandos Detalhados
+- **command = 0**: Envia um arquivo especificado para o cliente.
+- **command = 1**: Recebe um arquivo do cliente e salva localmente.
+- **command = 2**: Lista arquivos disponíveis no servidor.
+- **command = 3**: Cadastra um novo usuário no sistema.
+
+#### `functions/server.py`
+Contém funções auxiliares para criar o servidor e enviar arquivos.
+
+##### Funções
+- `cria_servidor(IP, PORTA)`: Cria e configura um servidor TCP.
+- `envia_arquivo(client, filepath)`: Envia um arquivo binário para o cliente conectado.]
+
+### Dependências
+Para executar o servidor, você precisará das seguintes bibliotecas Python:
+- `socket`: Biblioteca padrão para comunicação de rede.
+- `time`: Biblioteca padrão para manipulação de tempo.
+- `os`: Biblioteca padrão para interagir com o sistema operacional.
+
 ## 📦 Instalação
 
 1. Clone o repositório (na Raspberry Pi e no seu PC).
@@ -191,7 +241,7 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 3. Inicie código de armazenamento da Raspberry Pi executando [main.py](./RASPBERRY/main.py).
 
 4. Inicie o servidor no site ou na aplicação de interface de comando (no seu PC).
-   - O servidor de interface de comnado é inicado ao executar [server.py](./SERVER/server.py).
+   - O servidor de interface de comnado é inicado ao executar [main.py](./SERVER/python/main.py).
    - Para o site basta acessar o [link](https://local-share-web-page.vercel.app/).
      
 6. Envie e receba arquivos conforme necessário.
@@ -199,6 +249,16 @@ Contém funções para autenticação de usuários, incluindo criação de diret
 ### Esquemático de Ligação I2C
 
 <img alt="Esquemático Ligação I2C" src="https://github.com/user-attachments/assets/a6a376ad-6cdf-4e98-b5a8-319fb951b6fe" width="60%">
+
+
+## 🤝 Contribuições
+
+Você pode contribuir para o nosso projeto, fazendo um fork do nosso repositório e fazendo pull requests...
+
+### Melhorias Faltantes
+   1. Fazer o site funcionar 100%
+   2. Fazer uma aplicação com Interface gráfica para o cliente rodar de maneira local e amigável
+   3. Adicionar criptografia dos arquivos de cada usuário usando o hash da sua senha
 
 ## 📄 Licença
 
