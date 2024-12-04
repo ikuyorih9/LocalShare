@@ -22,7 +22,7 @@ Desenvolvido por:
 
 Um servidor local compartilhado permite que vários usuários cadastrados possam acessar arquivos de uma ou mais unidades de armazenamento comuns. A interação dos usuários com o sistema se dá por meio de uma interface de linha de comando ou por um site (**em breve**), onde é requisitado o endereço TCP/IP da ESP32, um usuário e senha. O armazenamento de arquivos é sigiloso e a requisição por parte de um usuário e senha mostra apenas os arquivos relacionados ao seu nome de usuário.
 
-O site se comunica com a ESP32 utilizando um protocolo TCP/IP. Ela, por sua vez, realiza a conexão serial com a **Raspberry Pi**, que se responsabilizará em armazenar e servir os arquivos de cada usuário. A **ESP32** utiliza processamento paralelo para permitir um maior fluxo de dados e uma comunicação de duas vias simultâneas, para envio e recebimento de dados.
+O site se comunica com a ESP32 utilizando um protocolo TCP/IP. Ela, por sua vez, realiza a conexão I2C com a **Raspberry Pi**, que se responsabilizará em armazenar e servir os arquivos de cada usuário. A **ESP32** utiliza processamento paralelo para permitir um maior fluxo de dados e uma comunicação de duas vias simultâneas, para envio e recebimento de dados.
 
 ## 🖥️ Funções das Tecnologias
 
@@ -32,7 +32,7 @@ Realiza a logística de armazenamento de arquivos, empregando o sistema operacio
 
 ### 🔹 ESP32:
 
-Estabelece a comunicação TCP/IP com a aplicação e serial com a Raspberry Pi. Utiliza o sistema operacional FreeRTOS para especializar dois núcleos da ESP32 para requisição e resposta.
+Estabelece a comunicação TCP/IP com a aplicação e I2C com a Raspberry Pi. Utiliza o sistema operacional FreeRTOS para especializar dois núcleos da ESP32 para requisição e resposta.
 
 ## ⚙️ Funcionalidades
 
