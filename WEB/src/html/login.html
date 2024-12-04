@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <script src="../scripts/login.js" defer></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    .container { margin: auto; padding: 20px; width: 50%; }
+    input[type="text"], input[type="password"], input[type="submit"] { margin: 10px; padding: 10px; width: 80%; }
+    a { text-decoration: none; color: blue; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form id="login-form">
+      <input type="text" id="username" name="username" placeholder="Nome de usuário" required><br>
+      <input type="password" id="password" name="password" placeholder="Senha" required><br>
+      <input type="submit" value="Entrar">
+    </form>      
+    <a href="/cadastro.html">Inscreva-se</a>
+  </div>
+</body>
+</html>

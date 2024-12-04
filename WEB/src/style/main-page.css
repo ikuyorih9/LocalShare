@@ -1,0 +1,30 @@
+body { 
+    font-family: Arial, 
+    sans-serif; 
+    text-align: center; 
+}
+
+.container { 
+    margin: auto; 
+    padding: 20px; 
+    width: 50%; 
+}
+
+.section { 
+    display: none; 
+}
+
+.active { 
+    display: block; 
+}
+
+button { 
+    padding: 10px 20px; 
+    margin: 5px; 
+    cursor: pointer;
+}
+
+select, input[type="file"] { 
+    margin: 10px; 
+    padding: 10px; 
+}
